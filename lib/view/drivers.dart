@@ -4,8 +4,11 @@ import 'package:bookitadminpanel/helpers/responsiveness.dart';
 import 'package:bookitadminpanel/widgets/custom_text.dart';
 import 'package:bookitadminpanel/widgets/shimmerwidget.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:file_picker/_internal/file_picker_web.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:open_file/open_file.dart';
 
 class DriversPage extends StatelessWidget {
   DriversPage({Key key}) : super(key: key);
@@ -19,6 +22,10 @@ class DriversPage extends StatelessWidget {
       "location": "thiruvarur",
       "rating": "4.5",
       "wallet": "2000",
+      "aadhaar": "pdf",
+      "pan": "pdf",
+      "rcbook": "pdf",
+      "licence": "pdf",
       "action": "block"
     },
     {
@@ -29,6 +36,10 @@ class DriversPage extends StatelessWidget {
       "location": "coimbatore",
       "rating": "4.7",
       "wallet": "2500",
+      "aadhaar": "pdf",
+      "pan": "pdf",
+      "rcbook": "pdf",
+      "licence": "pdf",
       "action": "block"
     },
     {
@@ -39,6 +50,10 @@ class DriversPage extends StatelessWidget {
       "location": "cbe",
       "rating": "4.3",
       "wallet": "1000",
+      "aadhaar": "pdf",
+      "pan": "pdf",
+      "rcbook": "pdf",
+      "licence": "pdf",
       "action": "block"
     },
   ];
@@ -176,6 +191,101 @@ class DriversPage extends StatelessWidget {
                     OutlineInputBorder(borderSide: BorderSide(color: green))),
           ),
           const SizedBox(height: 10),
+          TextField(
+            cursorColor: green,
+            decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(10),
+                hintText: "Enter Licence Number",
+                border: const OutlineInputBorder(),
+                focusedBorder:
+                    OutlineInputBorder(borderSide: BorderSide(color: green))),
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            cursorColor: green,
+            decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(10),
+                hintText: "Enter Licence Expiry date",
+                border: const OutlineInputBorder(),
+                focusedBorder:
+                    OutlineInputBorder(borderSide: BorderSide(color: green))),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'RC Book :',
+                style: TextStyle(fontSize: 12),
+              ),
+              TextButton(
+                  onPressed: () async {
+                    final result = FilePickerWeb.platform.pickFiles();
+                    if (result == null) return;
+                  },
+                  child: Text(
+                    'Upload',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: green,
+                        decoration: TextDecoration.underline),
+                  )),
+              const Text(
+                'Licence :',
+                style: TextStyle(fontSize: 12),
+              ),
+              TextButton(
+                  onPressed: () async {
+                    final result = FilePickerWeb.platform.pickFiles();
+                    if (result == null) return;
+                  },
+                  child: Text(
+                    'Upload',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: green,
+                        decoration: TextDecoration.underline),
+                  ))
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Aadhaar :',
+                style: TextStyle(fontSize: 12),
+              ),
+              TextButton(
+                  onPressed: () async {
+                    final result = FilePickerWeb.platform.pickFiles();
+                    if (result == null) return;
+                  },
+                  child: Text(
+                    'Upload',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: green,
+                        decoration: TextDecoration.underline),
+                  )),
+              const Text(
+                'Pan :',
+                style: TextStyle(fontSize: 12),
+              ),
+              TextButton(
+                  onPressed: () async {
+                    final result = FilePickerWeb.platform.pickFiles();
+                    if (result == null) return;
+                  },
+                  child: Text(
+                    'Upload',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: green,
+                        decoration: TextDecoration.underline),
+                  ))
+            ],
+          ),
         ]));
   }
 
@@ -213,6 +323,18 @@ class DriversPage extends StatelessWidget {
               ),
               DataColumn(
                 label: Text('Wallet'),
+              ),
+              DataColumn(
+                label: Text('Aadhaar'),
+              ),
+              DataColumn(
+                label: Text('Pan'),
+              ),
+              DataColumn(
+                label: Text('RC Book'),
+              ),
+              DataColumn(
+                label: Text('Licence'),
               ),
               DataColumn(
                 label: Text('Action'),
@@ -275,6 +397,62 @@ class DriversPage extends StatelessWidget {
                         size: 12,
                         color: Colors.black,
                       )),
+                      DataCell(Container(
+                          decoration: BoxDecoration(
+                            color: light,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: active, width: .5),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          child: CustomText(
+                            text: (e["aadhaar"]),
+                            color: active.withOpacity(.7),
+                            weight: FontWeight.bold,
+                            size: 12,
+                          ))),
+                      DataCell(Container(
+                          decoration: BoxDecoration(
+                            color: light,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: active, width: .5),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          child: CustomText(
+                            text: (e["pan"]),
+                            color: active.withOpacity(.7),
+                            weight: FontWeight.bold,
+                            size: 12,
+                          ))),
+                      DataCell(Container(
+                          decoration: BoxDecoration(
+                            color: light,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: active, width: .5),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          child: CustomText(
+                            text: (e["rcbook"]),
+                            color: active.withOpacity(.7),
+                            weight: FontWeight.bold,
+                            size: 12,
+                          ))),
+                      DataCell(Container(
+                          decoration: BoxDecoration(
+                            color: light,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: active, width: .5),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          child: CustomText(
+                            text: (e["licence"]),
+                            color: active.withOpacity(.7),
+                            weight: FontWeight.bold,
+                            size: 12,
+                          ))),
                       DataCell(Container(
                           decoration: BoxDecoration(
                             color: light,

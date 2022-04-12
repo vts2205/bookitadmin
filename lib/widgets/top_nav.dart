@@ -28,28 +28,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                   "assets/images/bookit.png",
                   width: 80,
                 )),
-            Expanded(
-                child: Container(
-                    child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomText(
-                  text: "Welcome Back!",
-                  color: blue,
-                  weight: FontWeight.w900,
-                  size: 20,
-                ),
-                const SizedBox(width: 5),
-                CustomText(
-                  text: "Nivy",
-                  color: green,
-                  weight: FontWeight.w900,
-                  size: 20,
-                ),
-              ],
-            )
-                    //Text("Welcome Back! Nivy",style: TextStyle(color: dark,fontWeight: FontWeight.w900,fontSize: 20),),
-                    )),
+            Expanded(child: Container()),
             Container(
               width: 1,
               height: 22,

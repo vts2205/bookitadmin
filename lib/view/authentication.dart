@@ -147,20 +147,21 @@ class AuthenticationPage extends StatelessWidget {
                   height: 15,
                 ),
                 InkWell(
-                  onTap: () async {
-                    if (formKey.currentState.validate()) {
-                      // var response = await APIService().createLogin(email.text);
-                      // if (response.statusCode == 200) {
-                      //   print("token:${response.token}");
-                      showLoading();
-                      Future.delayed(const Duration(milliseconds: 2000), () {
-                        Get.back();
-                        Get.offAll(SiteLayout());
-                      });
-                    } else {
-                      print("failed....");
-                    }
+                  onTap: () {
+                    Get.offAll(SiteLayout());
+                    // if (formKey.currentState.validate()) {
+                    //   // var response = await APIService().createLogin(email.text);
+                    //   // if (response.statusCode == 200) {
+                    //   //   print("token:${response.token}");
+                    //   showLoading();
+                    //   Future.delayed(const Duration(milliseconds: 2000), () {
+                    //     Get.back();
+                    //
+                    //   });
+                    // } else {
+                    //   print("failed....");
                     //  }
+                    // }
                   },
                   child: Container(
                     decoration: BoxDecoration(
