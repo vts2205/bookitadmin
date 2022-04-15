@@ -24,35 +24,6 @@ class DriversPage extends StatelessWidget {
       "wallet": "2000",
       "aadhaar": "pdf",
       "pan": "pdf",
-      "rcbook": "pdf",
-      "licence": "pdf",
-      "action": "block"
-    },
-    {
-      "id": "002",
-      "name": "priya",
-      "email": "priya@gmail.com",
-      "phone": "7867997754",
-      "location": "coimbatore",
-      "rating": "4.7",
-      "wallet": "2500",
-      "aadhaar": "pdf",
-      "pan": "pdf",
-      "rcbook": "pdf",
-      "licence": "pdf",
-      "action": "block"
-    },
-    {
-      "id": "003",
-      "name": "arun",
-      "email": "arun@gmail.com",
-      "phone": "6382136556",
-      "location": "cbe",
-      "rating": "4.3",
-      "wallet": "1000",
-      "aadhaar": "pdf",
-      "pan": "pdf",
-      "rcbook": "pdf",
       "licence": "pdf",
       "action": "block"
     },
@@ -506,9 +477,6 @@ class DriversPage extends StatelessWidget {
                 label: Text('Pan'),
               ),
               DataColumn(
-                label: Text('RC Book'),
-              ),
-              DataColumn(
                 label: Text('Licence'),
               ),
               DataColumn(
@@ -596,20 +564,6 @@ class DriversPage extends StatelessWidget {
                               horizontal: 12, vertical: 6),
                           child: CustomText(
                             text: (e["pan"]),
-                            color: active.withOpacity(.7),
-                            weight: FontWeight.bold,
-                            size: 12,
-                          ))),
-                      DataCell(Container(
-                          decoration: BoxDecoration(
-                            color: light,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: active, width: .5),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          child: CustomText(
-                            text: (e["rcbook"]),
                             color: active.withOpacity(.7),
                             weight: FontWeight.bold,
                             size: 12,
