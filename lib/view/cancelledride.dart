@@ -17,27 +17,9 @@ class CancelledRides extends StatelessWidget {
       "driverid": "002",
       "pickup": "coimbatore",
       "drop": "thiruvarur",
-      "type": "local",
-      "reason": "xxx"
-    },
-    {
-      "from": "07/08/2021",
-      "to": "13/08/2021",
-      "userid": "010",
-      "driverid": "001",
-      "pickup": "coimbatore",
-      "drop": "sivagiri",
-      "type": "rental",
-      "reason": "xxx"
-    },
-    {
-      "from": "31/12/2021",
-      "to": "04/01/2022",
-      "userid": "003",
-      "driverid": "010",
-      "pickup": "saibaba colony",
-      "drop": "gandhipuram",
-      "type": "out station",
+      "package": "local",
+      "cab": "Sedan",
+      "cancelledby": "User",
       "reason": "xxx"
     },
   ];
@@ -102,7 +84,9 @@ class CancelledRides extends StatelessWidget {
               DataColumn(label: Text("Driver ID")),
               DataColumn(label: Text("Pickup Location")),
               DataColumn(label: Text('Drop Location')),
-              DataColumn(label: Text('Type')),
+              DataColumn(label: Text('Package')),
+              DataColumn(label: Text('Cab')),
+              DataColumn(label: Text('Cancelled By')),
               DataColumn(label: Text('Reason')),
             ],
             rows: cancelinfo
@@ -144,7 +128,19 @@ class CancelledRides extends StatelessWidget {
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["type"]),
+                        text: (e["package"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["cab"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["cancelledby"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,

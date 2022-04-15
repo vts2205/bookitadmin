@@ -1,10 +1,17 @@
+import 'dart:io';
+
+import 'package:bookitadminpanel/api/PdfInvoiceApi.dart';
+import 'package:bookitadminpanel/api/pdf_api.dart';
 import 'package:bookitadminpanel/constants/style.dart';
 import 'package:bookitadminpanel/helpers/responsiveness.dart';
+import 'package:bookitadminpanel/model/customer.dart';
+import 'package:bookitadminpanel/model/invoice.dart';
+import 'package:bookitadminpanel/model/supplier.dart';
 import 'package:bookitadminpanel/widgets/custom_text.dart';
 import 'package:bookitadminpanel/widgets/shimmerwidget.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:open_file/open_file.dart';
 
 class CompletedRides extends StatelessWidget {
   CompletedRides({Key key}) : super(key: key);
@@ -17,28 +24,11 @@ class CompletedRides extends StatelessWidget {
       "driverid": "002",
       "pickup": "coimbatore",
       "drop": "thiruvarur",
-      "type": "local",
-      "otp": "123456"
-    },
-    {
-      "from": "07/08/2021",
-      "to": "13/08/2021",
-      "userid": "010",
-      "driverid": "001",
-      "pickup": "coimbatore",
-      "drop": "sivagiri",
-      "type": "rental",
-      "otp": "723456"
-    },
-    {
-      "from": "31/12/2021",
-      "to": "04/01/2022",
-      "userid": "003",
-      "driverid": "010",
-      "pickup": "saibaba colony",
-      "drop": "gandhipuram",
-      "type": "out station",
-      "otp": "823456"
+      "package": "local",
+      "cab": "Mini",
+      "km": "10",
+      "otp": "1234",
+      "invoice": "Print"
     },
   ];
 
@@ -102,8 +92,11 @@ class CompletedRides extends StatelessWidget {
               DataColumn(label: Text("Driver ID")),
               DataColumn(label: Text("Pickup Location")),
               DataColumn(label: Text('Drop Location')),
-              DataColumn(label: Text('Type')),
+              DataColumn(label: Text('Package')),
+              DataColumn(label: Text('Cab')),
+              DataColumn(label: Text('KM')),
               DataColumn(label: Text('OTP')),
+              DataColumn(label: Text('Invoice')),
             ],
             rows: completeinfo
                 .map((e) => DataRow(cells: [
@@ -144,7 +137,19 @@ class CompletedRides extends StatelessWidget {
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["type"]),
+                        text: (e["package"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["cab"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["km"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
@@ -155,10 +160,72 @@ class CompletedRides extends StatelessWidget {
                         size: 12,
                         color: Colors.black,
                       )),
+                      DataCell(
+                        TextButton(
+                          onPressed: () async {
+                            final date = DateTime.now();
+                            final invoice = Invoice(
+                              supplier: const Supplier(
+                                name: 'Bookit Cabs',
+                                address: 'Address',
+                              ),
+                              customer: const Customer(
+                                name: 'Nivy',
+                                address: 'Address',
+                              ),
+                              info: InvoiceInfo(
+                                date: date,
+                                number: '${DateTime.now().year}-9999',
+                              ),
+                              items: const [
+                                InvoiceItem(
+                                  description: 'Base Fare',
+                                  unitPrice: 1305,
+                                ),
+                                InvoiceItem(
+                                  description: 'Fare for remaining km',
+                                  unitPrice: 100,
+                                ),
+                                InvoiceItem(
+                                  description: 'Convenience Fee',
+                                  unitPrice: 5,
+                                ),
+                                InvoiceItem(
+                                  description: 'Taxes & Fees',
+                                  unitPrice: 100,
+                                ),
+                              ],
+                            );
+                            final pdfFile =
+                                await PdfInvoiceApi.generate(invoice);
+
+                            PdfApi.openFile(pdfFile);
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: light,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: active, width: .5),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              child: CustomText(
+                                text: (e["invoice"]),
+                                color: active.withOpacity(.7),
+                                weight: FontWeight.bold,
+                                size: 12,
+                              )),
+                        ),
+                      ),
                     ]))
                 .toList()),
       ),
     );
+  }
+
+  static Future openFile(File file) async {
+    final url = file.path;
+    await OpenFile.open(url);
   }
 
   buildRideCompleteShimmer() {

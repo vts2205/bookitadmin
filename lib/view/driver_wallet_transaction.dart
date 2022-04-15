@@ -1,3 +1,4 @@
+import 'package:bookitadminpanel/constants/controllers.dart';
 import 'package:bookitadminpanel/constants/style.dart';
 import 'package:bookitadminpanel/helpers/responsiveness.dart';
 import 'package:bookitadminpanel/widgets/custom_text.dart';
@@ -6,56 +7,76 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class RideInProgress extends StatelessWidget {
-  RideInProgress({Key key}) : super(key: key);
+class DriverWalletTransaction extends StatelessWidget {
+  DriverWalletTransaction({Key key}) : super(key: key);
 
-  final List<Map<String, String>> progressinfo = [
+  final List<Map<String, String>> historyinfo = [
     {
-      "from": "31/05/2021",
-      "to": "04/06/2021",
-      "userid": "001",
-      "driverid": "002",
-      "pickup": "coimbatore",
-      "drop": "thiruvarur",
-      "package": "local",
-      "cab": "Sedan",
-      "otp": "1234"
+      "name": "Naveen",
+      "date": "04/06/2021 2:45 PM",
+      "bookingid": "ABCD1234",
+      "transaction": "Wallet",
+      "amount": "- 200",
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            Row(
+    return Container(
+      child: Column(
+        children: [
+          Obx(
+            () => Row(
               children: [
                 Container(
                     margin: EdgeInsets.only(
                         top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
                     child: CustomText(
-                      text: "Rides in Progress",
+                      text: menuController.activeItem.value,
                       size: 20,
                       weight: FontWeight.bold,
                       color: green,
                     )),
               ],
             ),
-            Expanded(
-                child: ListView(
-              children: [
-                buildRideProgressTable()
-                //buildRideProgressShimmer()
-              ],
-            )),
-          ],
+          ),
+          const SizedBox(height: 50),
+          Align(
+            alignment: Alignment.topLeft,
+            child: buildSearchBar(),
+          ),
+          Expanded(
+              child: ListView(
+            children: [
+              buildRideHistoryTable()
+              //buildRideHistoryShimmer()
+            ],
+          )),
+        ],
+      ),
+    );
+  }
+
+  buildSearchBar() {
+    return Container(
+      width: 300,
+      height: 40,
+      child: TextField(
+        cursorColor: green,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(10),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: green)),
+          suffixIcon: Icon(Icons.search, color: green),
+          hintText: "Search by ID",
         ),
       ),
     );
   }
 
-  buildRideProgressTable() {
+  buildRideHistoryTable() {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -73,75 +94,47 @@ class RideInProgress extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(bottom: 30),
         child: DataTable2(
-            columnSpacing: 12,
-            horizontalMargin: 12,
+            columnSpacing: 5,
+            horizontalMargin: 5,
             minWidth: 600,
             columns: const [
-              DataColumn(label: Text("From")),
-              DataColumn(label: Text("To")),
-              DataColumn(label: Text("User ID")),
-              DataColumn(label: Text("Driver ID")),
-              DataColumn(label: Text("Pickup Location")),
-              DataColumn(label: Text('Drop Location')),
-              DataColumn(label: Text('Package')),
-              DataColumn(label: Text('Cab')),
-              DataColumn(label: Text('OTP')),
+              DataColumn(label: Text("Name")),
+              DataColumn(label: Text("Date")),
+              DataColumn(label: Text("Booking ID")),
+              DataColumn(label: Text("Transaction")),
+              DataColumn(label: Text("Amount")),
             ],
-            rows: progressinfo
+            rows: historyinfo
                 .map((e) => DataRow(cells: [
                       DataCell(CustomText(
-                        text: (e["from"]),
+                        text: (e["name"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["to"]),
+                        text: (e["date"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["userid"]),
+                        text: (e["bookingid"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["driverid"]),
+                        text: (e["transaction"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["pickup"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["drop"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["package"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["cab"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["otp"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
+                        text: (e["amount"]),
+                        weight: FontWeight.bold,
+                        size: 15,
+                        color: Colors.red,
                       )),
                     ]))
                 .toList()),
@@ -149,7 +142,7 @@ class RideInProgress extends StatelessWidget {
     );
   }
 
-  buildRideProgressShimmer() {
+  buildRideHistoryShimmer() {
     return Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -186,7 +179,7 @@ class RideInProgress extends StatelessWidget {
                 label: ShimmerWidget.rectangular(height: 16),
               ),
             ],
-            rows: progressinfo
+            rows: historyinfo
                 .map((e) => const DataRow(cells: [
                       DataCell(ShimmerWidget.rectangular(height: 16)),
                       DataCell(ShimmerWidget.rectangular(height: 16)),

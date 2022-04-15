@@ -2,8 +2,10 @@ import 'package:bookitadminpanel/routing/routes.dart';
 import 'package:bookitadminpanel/view/Vendor.dart';
 import 'package:bookitadminpanel/view/cancelledride.dart';
 import 'package:bookitadminpanel/view/completedride.dart';
+import 'package:bookitadminpanel/view/driver_wallet_transaction.dart';
 import 'package:bookitadminpanel/view/drivers.dart';
 import 'package:bookitadminpanel/view/location.dart';
+import 'package:bookitadminpanel/view/manual_booking_history.dart';
 import 'package:bookitadminpanel/view/overview.dart';
 import 'package:bookitadminpanel/view/profile.dart';
 import 'package:bookitadminpanel/view/progressride.dart';
@@ -26,6 +28,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(VendorPage());
     case DriversPageRoute:
       return _getPageRoute(DriversPage());
+    case DriverWalletTransactionRoute:
+      return _getPageRoute(DriverWalletTransaction());
     case UsersPageRoute:
       return _getPageRoute(UsersPage());
     case RideRequestPageRoute:
@@ -38,6 +42,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(CancelledRides());
     case ScheduledRidePageRoute:
       return _getPageRoute(ScheduledRides());
+    case ManualBookingHistoryRoute:
+      return _getPageRoute(const ManualBookingHistoryScreen());
     case LocationPageRoute:
       return _getPageRoute(const LocationPage());
     case RideHistoryPageRoute:

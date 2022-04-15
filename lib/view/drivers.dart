@@ -83,27 +83,29 @@ class DriversPage extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: buildSearchBar(),
           ),
-          const SizedBox(height: 30),
-          Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: blue,
-                ),
-                child: IconButton(
-                    onPressed: () {
-                      buildAddSubAdmin();
-                    },
-                    icon: const Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    )),
-              )),
           Expanded(
               child: ListView(
             children: [
+              if (ResponsiveWidget.isLargeScreen(context) ||
+                  ResponsiveWidget.isMediumScreen(context))
+                if (ResponsiveWidget.isCustomSize(context))
+                  buildAddDriverLarge(context)
+                else
+                  buildAddDriverLarge(context)
+              else
+                buildAddDriverSmall(context),
+              const SizedBox(height: 50),
+              const Divider(thickness: 2),
+              const SizedBox(height: 50),
               //buildDriverShimmer()
+              Text(
+                'Driver List',
+                style: TextStyle(
+                    fontSize: 20, color: blue, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               buildDriversTable()
             ],
           )),
@@ -131,162 +133,335 @@ class DriversPage extends StatelessWidget {
     );
   }
 
-  buildAddSubAdmin() {
-    return Get.defaultDialog(
-        barrierDismissible: false,
-        title: "Driver",
-        titleStyle:
-            TextStyle(color: blue, fontSize: 15, fontWeight: FontWeight.w900),
-        radius: 5,
-        actions: [
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: blue, padding: const EdgeInsets.all(15)),
-              onPressed: () {
-                Get.back();
+  buildAddDriverLarge(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(
+        'Add Driver',
+        style:
+            TextStyle(fontSize: 20, color: blue, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 20),
+      Row(
+        children: [
+          Expanded(
+            child: TextField(
+              cursorColor: green,
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(10),
+                  hintText: "Enter Name",
+                  border: const OutlineInputBorder(),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide(color: green))),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              cursorColor: green,
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(10),
+                  hintText: "Enter Email",
+                  border: const OutlineInputBorder(),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide(color: green))),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              cursorColor: green,
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(10),
+                  hintText: "Enter Phone Number",
+                  border: const OutlineInputBorder(),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide(color: green))),
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 20),
+      Row(
+        children: [
+          Expanded(
+            child: TextField(
+              cursorColor: green,
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(10),
+                  hintText: "Enter Location",
+                  border: const OutlineInputBorder(),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide(color: green))),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              cursorColor: green,
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(10),
+                  hintText: "Enter Licence Number",
+                  border: const OutlineInputBorder(),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide(color: green))),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              cursorColor: green,
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(10),
+                  hintText: "Enter Licence Expiry date",
+                  border: const OutlineInputBorder(),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide(color: green))),
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 20),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Photo :',
+            style: TextStyle(fontSize: 15),
+          ),
+          TextButton(
+              onPressed: () async {
+                final result = FilePickerWeb.platform.pickFiles();
+                if (result == null) return;
               },
-              child: const Text(
-                "Add",
-                style: TextStyle(fontSize: 15, color: Colors.white),
+              child: Text(
+                'Upload',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: green,
+                    decoration: TextDecoration.underline),
+              )),
+          const Text(
+            'Licence :',
+            style: TextStyle(fontSize: 15),
+          ),
+          TextButton(
+              onPressed: () async {
+                final result = FilePickerWeb.platform.pickFiles();
+                if (result == null) return;
+              },
+              child: Text(
+                'Upload',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: green,
+                    decoration: TextDecoration.underline),
+              )),
+          const Text(
+            'Aadhaar :',
+            style: TextStyle(fontSize: 15),
+          ),
+          TextButton(
+              onPressed: () async {
+                final result = FilePickerWeb.platform.pickFiles();
+                if (result == null) return;
+              },
+              child: Text(
+                'Upload',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: green,
+                    decoration: TextDecoration.underline),
+              )),
+          const Text(
+            'Pan :',
+            style: TextStyle(fontSize: 15),
+          ),
+          TextButton(
+              onPressed: () async {
+                final result = FilePickerWeb.platform.pickFiles();
+                if (result == null) return;
+              },
+              child: Text(
+                'Upload',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: green,
+                    decoration: TextDecoration.underline),
+              )),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: blue),
+              onPressed: () {},
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.20,
+                height: 45,
+                padding: const EdgeInsets.all(10),
+                child: const Center(
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                ),
+              )),
+        ],
+      ),
+    ]);
+  }
+
+  buildAddDriverSmall(BuildContext context) {
+    return Column(children: [
+      TextField(
+        cursorColor: green,
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(10),
+            hintText: "Enter Name",
+            border: const OutlineInputBorder(),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: green))),
+      ),
+      const SizedBox(height: 10),
+      TextField(
+        cursorColor: green,
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(10),
+            hintText: "Enter Email",
+            border: const OutlineInputBorder(),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: green))),
+      ),
+      const SizedBox(height: 10),
+      TextField(
+        cursorColor: green,
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(10),
+            hintText: "Enter Phone Number",
+            border: const OutlineInputBorder(),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: green))),
+      ),
+      const SizedBox(height: 10),
+      TextField(
+        cursorColor: green,
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(10),
+            hintText: "Enter Location",
+            border: const OutlineInputBorder(),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: green))),
+      ),
+      const SizedBox(height: 10),
+      TextField(
+        cursorColor: green,
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(10),
+            hintText: "Enter Licence Number",
+            border: const OutlineInputBorder(),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: green))),
+      ),
+      const SizedBox(height: 10),
+      TextField(
+        cursorColor: green,
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(10),
+            hintText: "Enter Licence Expiry date",
+            border: const OutlineInputBorder(),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: green))),
+      ),
+      const SizedBox(height: 10),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Photo :',
+            style: TextStyle(fontSize: 12),
+          ),
+          TextButton(
+              onPressed: () async {
+                final result = FilePickerWeb.platform.pickFiles();
+                if (result == null) return;
+              },
+              child: Text(
+                'Upload',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: green,
+                    decoration: TextDecoration.underline),
+              )),
+          const Text(
+            'Licence :',
+            style: TextStyle(fontSize: 12),
+          ),
+          TextButton(
+              onPressed: () async {
+                final result = FilePickerWeb.platform.pickFiles();
+                if (result == null) return;
+              },
+              child: Text(
+                'Upload',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: green,
+                    decoration: TextDecoration.underline),
               ))
         ],
-        content: Column(children: [
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Name",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
+      ),
+      const SizedBox(height: 10),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Aadhaar :',
+            style: TextStyle(fontSize: 12),
           ),
-          const SizedBox(height: 10),
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Email",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
+          TextButton(
+              onPressed: () async {
+                final result = FilePickerWeb.platform.pickFiles();
+                if (result == null) return;
+              },
+              child: Text(
+                'Upload',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: green,
+                    decoration: TextDecoration.underline),
+              )),
+          const Text(
+            'Pan :',
+            style: TextStyle(fontSize: 12),
           ),
-          const SizedBox(height: 10),
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Phone Number",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Location",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Licence Number",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Licence Expiry date",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'RC Book :',
-                style: TextStyle(fontSize: 12),
+          TextButton(
+              onPressed: () async {
+                final result = FilePickerWeb.platform.pickFiles();
+                if (result == null) return;
+              },
+              child: Text(
+                'Upload',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: green,
+                    decoration: TextDecoration.underline),
+              ))
+        ],
+      ),
+      const SizedBox(height: 20),
+      Center(
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(primary: blue),
+            onPressed: () {},
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.20,
+              height: 45,
+              padding: const EdgeInsets.all(10),
+              child: const Center(
+                child: Text(
+                  'Submit',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
               ),
-              TextButton(
-                  onPressed: () async {
-                    final result = FilePickerWeb.platform.pickFiles();
-                    if (result == null) return;
-                  },
-                  child: Text(
-                    'Upload',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: green,
-                        decoration: TextDecoration.underline),
-                  )),
-              const Text(
-                'Licence :',
-                style: TextStyle(fontSize: 12),
-              ),
-              TextButton(
-                  onPressed: () async {
-                    final result = FilePickerWeb.platform.pickFiles();
-                    if (result == null) return;
-                  },
-                  child: Text(
-                    'Upload',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: green,
-                        decoration: TextDecoration.underline),
-                  ))
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Aadhaar :',
-                style: TextStyle(fontSize: 12),
-              ),
-              TextButton(
-                  onPressed: () async {
-                    final result = FilePickerWeb.platform.pickFiles();
-                    if (result == null) return;
-                  },
-                  child: Text(
-                    'Upload',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: green,
-                        decoration: TextDecoration.underline),
-                  )),
-              const Text(
-                'Pan :',
-                style: TextStyle(fontSize: 12),
-              ),
-              TextButton(
-                  onPressed: () async {
-                    final result = FilePickerWeb.platform.pickFiles();
-                    if (result == null) return;
-                  },
-                  child: Text(
-                    'Upload',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: green,
-                        decoration: TextDecoration.underline),
-                  ))
-            ],
-          ),
-        ]));
+            )),
+      ),
+    ]);
   }
 
   buildDriversTable() {

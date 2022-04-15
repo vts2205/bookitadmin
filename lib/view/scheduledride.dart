@@ -11,37 +11,16 @@ class ScheduledRides extends StatelessWidget {
 
   final List<Map<String, String>> scheduleinfo = [
     {
-      "from": "31/05/2021",
-      "to": "04/06/2021",
-      "userid": "001",
-      "driverid": "002",
-      "pickup": "coimbatore",
-      "drop": "thiruvarur",
-      "type": "tour",
-      "otp1": "123456",
-      "otp2": "987654"
-    },
-    {
-      "from": "07/08/2021",
-      "to": "13/08/2021",
-      "userid": "010",
-      "driverid": "001",
-      "pickup": "coimbatore",
-      "drop": "sivagiri",
-      "type": "rental",
-      "otp1": "723456",
-      "otp2": "987654"
-    },
-    {
       "from": "31/12/2021",
       "to": "03/01/2022",
       "userid": "003",
       "driverid": "010",
       "pickup": "saibaba colony",
       "drop": "gandhipuram",
-      "type": "out station",
-      "otp1": "823456",
-      "otp2": "987654"
+      "package": "out station",
+      "cab": "sedan",
+      "otp1": "8234",
+      "otp2": "9876"
     },
   ];
 
@@ -105,7 +84,8 @@ class ScheduledRides extends StatelessWidget {
               DataColumn(label: Text("Driver ID")),
               DataColumn(label: Text("Pickup Location")),
               DataColumn(label: Text('Drop Location')),
-              DataColumn(label: Text('Type')),
+              DataColumn(label: Text('Package')),
+              DataColumn(label: Text('Cab')),
               DataColumn(label: Text('Pickup OTP')),
               DataColumn(label: Text('Drop OTP')),
             ],
@@ -148,7 +128,13 @@ class ScheduledRides extends StatelessWidget {
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["type"]),
+                        text: (e["package"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["cab"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,

@@ -33,6 +33,8 @@ class MenuController extends GetxController {
         return _customIcon(Icons.person_outline_outlined, itemName);
       case DriversPageRoute:
         return _customIcon(Icons.drive_eta, itemName);
+      case DriverWalletTransactionRoute:
+        return _customIcon(Icons.account_balance_wallet_outlined, itemName);
       case UsersPageRoute:
         return _customIcon(Icons.people_alt_outlined, itemName);
       case RideRequestPageRoute:
@@ -42,11 +44,13 @@ class MenuController extends GetxController {
       case CompletedRidePageRoute:
         return _customIcon(Icons.check_circle_outlined, itemName);
       case RideHistoryPageRoute:
-        return _customIcon(Icons.history, itemName);
+        return _customIcon(Icons.history_toggle_off, itemName);
       case ScheduledRidePageRoute:
         return _customIcon(Icons.schedule_rounded, itemName);
       case CancelledRidePageRoute:
         return _customIcon(Icons.cancel_outlined, itemName);
+      case ManualBookingHistoryRoute:
+        return _customIcon(Icons.history, itemName);
       case LocationPageRoute:
         return _customIcon(Icons.location_on_outlined, itemName);
       case AuthenticationPageRoute:

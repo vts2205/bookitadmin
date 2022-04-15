@@ -5,26 +5,38 @@ import 'package:bookitadminpanel/widgets/custom_text.dart';
 import 'package:bookitadminpanel/widgets/shimmerwidget.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
-class RideHistory extends StatelessWidget {
-  RideHistory({Key key}) : super(key: key);
+class ManualBookingHistoryScreen extends StatefulWidget {
+  const ManualBookingHistoryScreen({Key key}) : super(key: key);
 
-  final List<Map<String, String>> historyinfo = [
+  @override
+  State<ManualBookingHistoryScreen> createState() =>
+      _ManualBookingHistoryScreenState();
+}
+
+class _ManualBookingHistoryScreenState
+    extends State<ManualBookingHistoryScreen> {
+  DateTime _dateTime = DateTime(25, 03, 2022, 6, 51);
+
+  bool isVisible = false;
+
+  final List<Map<String, String>> driversinfo = [
     {
-      "from": "31/05/2021",
-      "to": "04/06/2021",
-      "userid": "001",
-      "driverid": "002",
-      "pickup": "coimbatore",
-      "drop": "thiruvarur",
-      "package": "tour",
-      "cab": "Sedan",
-      "method": "UPI",
-      "payment": "5000"
+      "id": "001",
+      "name": "nivy",
+      "package": "Outstation",
+      "cabtype": "XUV",
+      "pickup": "Coimbatore",
+      "drop": "Thiruvarur",
+      "pickupdate": "20/02/2022",
+      "dropdate": "25/02/2022",
+      "km": "100 KM",
+      "price": "2000",
+      "bookedby": "Kalai",
+      "status": "completed"
     },
   ];
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,13 +60,13 @@ class RideHistory extends StatelessWidget {
           const SizedBox(height: 50),
           Align(
             alignment: Alignment.topLeft,
-            child: buildSearchBar(),
+            child: buildFromToDate(),
           ),
           Expanded(
               child: ListView(
             children: [
-              buildRideHistoryTable()
-              //buildRideHistoryShimmer()
+              //buildDriverShimmer()
+              if (isVisible) buildDriversTable()
             ],
           )),
         ],
@@ -62,29 +74,96 @@ class RideHistory extends StatelessWidget {
     );
   }
 
-  buildSearchBar() {
-    return Container(
-      width: 300,
-      height: 40,
-      child: TextField(
-        cursorColor: green,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(10),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(color: green)),
-          suffixIcon: Icon(Icons.search, color: green),
-          hintText: "Search by ID",
+  buildFromToDate() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    isVisible = !isVisible;
+                  });
+                },
+                child:
+                    Text('Today', style: TextStyle(fontSize: 15, color: blue))),
+            Container(
+              width: 1,
+              height: 30,
+              color: Colors.black,
+            ),
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    isVisible = !isVisible;
+                  });
+                },
+                child: Text('Yesterday',
+                    style: TextStyle(fontSize: 15, color: blue))),
+          ],
         ),
-      ),
+        Row(
+          children: [
+            const Text('From :', style: TextStyle(fontSize: 15)),
+            TextButton(
+                onPressed: () {
+                  pickDateTime();
+                },
+                child: Text(
+                  '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}',
+                  style: TextStyle(fontSize: 15, color: blue),
+                )),
+            Container(
+              width: 1,
+              height: 30,
+              color: Colors.black,
+            ),
+            const SizedBox(width: 10),
+            const Text('To :', style: TextStyle(fontSize: 15)),
+            TextButton(
+                onPressed: () {
+                  pickDateTime();
+                },
+                child: Text(
+                  '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}',
+                  style: TextStyle(fontSize: 15, color: blue),
+                )),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: blue),
+                onPressed: () {
+                  setState(() {
+                    isVisible = !isVisible;
+                  });
+                },
+                child: const Text(
+                  'Submit',
+                  style: TextStyle(color: Colors.white),
+                ))
+          ],
+        )
+      ],
     );
   }
 
-  buildRideHistoryTable() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Container(
+  Future pickDateTime() async {
+    DateTime date = await pickDate();
+    if (date == null) return;
+
+    final dateTime = DateTime(date.day, date.month, date.year);
+
+    setState(() {
+      this._dateTime = dateTime;
+    });
+  }
+
+  Future<DateTime> pickDate() => showDatePicker(
+      context: context,
+      initialDate: _dateTime,
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2100));
+
+  buildDriversTable() {
+    return Container(
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: active.withOpacity(.4), width: .5),
@@ -99,43 +178,67 @@ class RideHistory extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(bottom: 30),
         child: DataTable2(
-            columnSpacing: 5,
-            horizontalMargin: 5,
+            columnSpacing: 12,
+            horizontalMargin: 12,
             minWidth: 600,
             columns: const [
-              DataColumn(label: Text("From")),
-              DataColumn(label: Text("To")),
-              DataColumn(label: Text("User ID")),
-              DataColumn(label: Text("Driver ID")),
-              DataColumn(label: Text("Pickup Location")),
-              DataColumn(label: Text('Drop Location')),
-              DataColumn(label: Text('Package')),
-              DataColumn(label: Text('Cab')),
-              DataColumn(label: Text('Payment Method')),
-              DataColumn(label: Text('Payment')),
+              DataColumn(label: Text("ID")),
+              DataColumn(
+                label: Text("Name"),
+              ),
+              DataColumn(
+                label: Text('Package'),
+              ),
+              DataColumn(
+                label: Text('Cab'),
+              ),
+              DataColumn(
+                label: Text('Pickup Location'),
+              ),
+              DataColumn(
+                label: Text('Drop Location'),
+              ),
+              DataColumn(
+                label: Text('Pickup Date'),
+              ),
+              DataColumn(
+                label: Text('Drop Date'),
+              ),
+              DataColumn(
+                label: Text('KM'),
+              ),
+              DataColumn(
+                label: Text('Price'),
+              ),
+              DataColumn(
+                label: Text('Booked By'),
+              ),
+              DataColumn(
+                label: Text('Status'),
+              ),
             ],
-            rows: historyinfo
+            rows: driversinfo
                 .map((e) => DataRow(cells: [
                       DataCell(CustomText(
-                        text: (e["from"]),
+                        text: (e["id"]),
+                        size: 12,
+                        weight: FontWeight.normal,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["name"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["to"]),
+                        text: (e["package"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["userid"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["driverid"]),
+                        text: (e["cabtype"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
@@ -153,36 +256,46 @@ class RideHistory extends StatelessWidget {
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["package"]),
+                        text: (e["pickupdate"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["cab"]),
+                        text: (e["dropdate"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["method"]),
+                        text: (e["km"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["payment"]),
+                        text: (e["price"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["bookedby"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["status"]),
+                        weight: FontWeight.bold,
+                        size: 15,
+                        color: Colors.green,
                       )),
                     ]))
-                .toList()),
-      ),
-    );
+                .toList()));
   }
 
-  buildRideHistoryShimmer() {
+  buildDriverShimmer() {
     return Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -219,7 +332,7 @@ class RideHistory extends StatelessWidget {
                 label: ShimmerWidget.rectangular(height: 16),
               ),
             ],
-            rows: historyinfo
+            rows: driversinfo
                 .map((e) => const DataRow(cells: [
                       DataCell(ShimmerWidget.rectangular(height: 16)),
                       DataCell(ShimmerWidget.rectangular(height: 16)),

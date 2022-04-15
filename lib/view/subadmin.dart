@@ -3,6 +3,7 @@ import 'package:bookitadminpanel/constants/style.dart';
 import 'package:bookitadminpanel/helpers/responsiveness.dart';
 import 'package:bookitadminpanel/widgets/custom_text.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,101 +60,256 @@ class SubAdminPage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 50),
-          Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: blue,
-                ),
-                child: IconButton(
-                    onPressed: () {
-                      buildAddSubAdmin();
-                    },
-                    icon: const Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    )),
-              )),
           Expanded(
               child: ListView(
-            children: [buildSubAdminTable()],
+            children: [
+              if (ResponsiveWidget.isLargeScreen(context) ||
+                  ResponsiveWidget.isMediumScreen(context))
+                if (ResponsiveWidget.isCustomSize(context))
+                  buildAddSubAdminLarge(context)
+                else
+                  buildAddSubAdminLarge(context)
+              else
+                buildAddSubAdminSmall(context),
+              const SizedBox(height: 50),
+              const Divider(thickness: 2),
+              const SizedBox(height: 50),
+              Text(
+                'Sub-Admin List',
+                style: TextStyle(
+                    fontSize: 20, color: blue, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              buildSubAdminTable()
+            ],
           ))
         ],
       ),
     );
   }
 
-  buildAddSubAdmin() {
-    return Get.defaultDialog(
-        title: "Sub-Admin",
-        titleStyle:
-            TextStyle(color: blue, fontSize: 15, fontWeight: FontWeight.w900),
-        radius: 5,
-        actions: [
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: blue, padding: const EdgeInsets.all(15)),
-              onPressed: () {
-                Get.back();
-              },
-              child: const Text(
-                "Add",
-                style: TextStyle(fontSize: 15, color: Colors.white),
-              ))
-        ],
-        content: Column(children: [
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Name",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
+  buildAddSubAdminLarge(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Add Sub-Admin',
+          style:
+              TextStyle(fontSize: 20, color: blue, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                cursorColor: green,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10),
+                    hintText: "Enter Name",
+                    border: const OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: green))),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: TextField(
+                cursorColor: green,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10),
+                    hintText: "Enter Phone Number",
+                    border: const OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: green))),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: TextField(
+                cursorColor: green,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10),
+                    hintText: "Enter Designation",
+                    border: const OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: green))),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                cursorColor: green,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10),
+                    hintText: "Enter Email Address",
+                    border: const OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: green))),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: TextField(
+                cursorColor: green,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10),
+                    hintText: "Enter Password",
+                    border: const OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: green))),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Card(
+              child: Row(
+                children: [
+                  const Text(
+                    'Photo :',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  TextButton(
+                      onPressed: () async {
+                        final result = FilePickerWeb.platform.pickFiles();
+                        if (result == null) return;
+                      },
+                      child: Text(
+                        'Upload',
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: green,
+                            decoration: TextDecoration.underline),
+                      )),
+                ],
+              ),
+            ),
+            Expanded(
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: blue),
+                    onPressed: () {},
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.30,
+                      height: 45,
+                      padding: const EdgeInsets.all(10),
+                      child: const Center(
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      ),
+                    )))
+          ],
+        )
+      ],
+    );
+  }
+
+  buildAddSubAdminSmall(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Add Sub-Admin',
+          style:
+              TextStyle(fontSize: 20, color: blue, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 20),
+        TextField(
+          cursorColor: green,
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(10),
+              hintText: "Enter Name",
+              border: const OutlineInputBorder(),
+              focusedBorder:
+                  OutlineInputBorder(borderSide: BorderSide(color: green))),
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          cursorColor: green,
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(10),
+              hintText: "Enter Phone Number",
+              border: const OutlineInputBorder(),
+              focusedBorder:
+                  OutlineInputBorder(borderSide: BorderSide(color: green))),
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          cursorColor: green,
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(10),
+              hintText: "Enter Designation",
+              border: const OutlineInputBorder(),
+              focusedBorder:
+                  OutlineInputBorder(borderSide: BorderSide(color: green))),
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          cursorColor: green,
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(10),
+              hintText: "Enter Email Address",
+              border: const OutlineInputBorder(),
+              focusedBorder:
+                  OutlineInputBorder(borderSide: BorderSide(color: green))),
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          cursorColor: green,
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(10),
+              hintText: "Enter Password",
+              border: const OutlineInputBorder(),
+              focusedBorder:
+                  OutlineInputBorder(borderSide: BorderSide(color: green))),
+        ),
+        const SizedBox(height: 10),
+        Card(
+          child: Row(
+            children: [
+              const Text(
+                'Photo :',
+                style: TextStyle(fontSize: 20),
+              ),
+              TextButton(
+                  onPressed: () async {
+                    final result = FilePickerWeb.platform.pickFiles();
+                    if (result == null) return;
+                  },
+                  child: Text(
+                    'Upload',
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: green,
+                        decoration: TextDecoration.underline),
+                  )),
+            ],
           ),
-          const SizedBox(height: 10),
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Phone Number",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Designation",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Email Address",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            cursorColor: green,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
-                hintText: "Enter Password",
-                border: const OutlineInputBorder(),
-                focusedBorder:
-                    OutlineInputBorder(borderSide: BorderSide(color: green))),
-          )
-        ]));
+        ),
+        const SizedBox(height: 10),
+        Center(
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: blue),
+              onPressed: () {},
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.30,
+                height: 45,
+                padding: const EdgeInsets.all(10),
+                child: const Center(
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                ),
+              )),
+        )
+      ],
+    );
   }
 
   buildSubAdminTable() {

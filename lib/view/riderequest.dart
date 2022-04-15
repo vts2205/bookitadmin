@@ -14,7 +14,6 @@ class RideRequestPage extends StatelessWidget {
     {
       "date": "31/05/2021",
       "userid": "001",
-      "driverid": "002",
       "pickup": "coimbatore",
       "drop": "thiruvarur",
       "payment": "UPI"
@@ -22,7 +21,6 @@ class RideRequestPage extends StatelessWidget {
     {
       "date": "07/08/2021",
       "userid": "010",
-      "driverid": "001",
       "pickup": "coimbatore",
       "drop": "sivagiri",
       "payment": "Cash"
@@ -30,7 +28,6 @@ class RideRequestPage extends StatelessWidget {
     {
       "date": "31/12/2021",
       "userid": "003",
-      "driverid": "010",
       "pickup": "saibaba colony",
       "drop": "gandhipuram",
       "payment": "Net banking"
@@ -91,7 +88,6 @@ class RideRequestPage extends StatelessWidget {
           columns: const [
             DataColumn(label: Text("Date")),
             DataColumn(label: Text("User ID")),
-            DataColumn(label: Text("Driver ID")),
             DataColumn(label: Text("Pickup Location")),
             DataColumn(label: Text('Drop Location')),
             DataColumn(label: Text('Payment Method')),
@@ -106,12 +102,6 @@ class RideRequestPage extends StatelessWidget {
                     )),
                     DataCell(CustomText(
                       text: (e["userid"]),
-                      weight: FontWeight.normal,
-                      size: 12,
-                      color: Colors.black,
-                    )),
-                    DataCell(CustomText(
-                      text: (e["driverid"]),
                       weight: FontWeight.normal,
                       size: 12,
                       color: Colors.black,
