@@ -14,7 +14,6 @@ class ScheduledRides extends StatelessWidget {
       "from": "31/12/2021",
       "to": "03/01/2022",
       "userid": "003",
-      "driverid": "010",
       "pickup": "saibaba colony",
       "drop": "gandhipuram",
       "package": "out station",
@@ -81,7 +80,6 @@ class ScheduledRides extends StatelessWidget {
               DataColumn(label: Text("From")),
               DataColumn(label: Text("To")),
               DataColumn(label: Text("User ID")),
-              DataColumn(label: Text("Driver ID")),
               DataColumn(label: Text("Pickup Location")),
               DataColumn(label: Text('Drop Location')),
               DataColumn(label: Text('Package')),
@@ -105,12 +103,6 @@ class ScheduledRides extends StatelessWidget {
                       )),
                       DataCell(CustomText(
                         text: (e["userid"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["driverid"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
