@@ -4,6 +4,7 @@ import 'package:bookitadminpanel/services/apiservices.dart';
 import 'package:bookitadminpanel/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'forgotpassword.dart';
@@ -14,6 +15,7 @@ class AuthenticationPage extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   final email = TextEditingController();
   final password = TextEditingController();
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -147,21 +149,15 @@ class AuthenticationPage extends StatelessWidget {
                   height: 15,
                 ),
                 InkWell(
-                  onTap: () {
-                    Get.offAll(SiteLayout());
-                    // if (formKey.currentState.validate()) {
-                    //   // var response = await APIService().createLogin(email.text);
-                    //   // if (response.statusCode == 200) {
-                    //   //   print("token:${response.token}");
-                    //   showLoading();
-                    //   Future.delayed(const Duration(milliseconds: 2000), () {
-                    //     Get.back();
-                    //
-                    //   });
-                    // } else {
-                    //   print("failed....");
-                    //  }
-                    // }
+                  onTap: () async {
+                    var data = await APIService()
+                        .createLogin(email.text, password.text);
+                    if (data['success'] == true) {
+                      box.write("token", data["token"]);
+                      Get.to(SiteLayout());
+                    } else {
+                      print('...failed...');
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(

@@ -84,8 +84,8 @@ class ScheduledRides extends StatelessWidget {
               DataColumn(label: Text('Drop Location')),
               DataColumn(label: Text('Package')),
               DataColumn(label: Text('Cab')),
-              DataColumn(label: Text('Pickup OTP')),
-              DataColumn(label: Text('Drop OTP')),
+              DataColumn(label: Text('Start OTP')),
+              DataColumn(label: Text('End OTP')),
             ],
             rows: scheduleinfo
                 .map((e) => DataRow(cells: [

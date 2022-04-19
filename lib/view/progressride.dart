@@ -19,7 +19,8 @@ class RideInProgress extends StatelessWidget {
       "drop": "thiruvarur",
       "package": "local",
       "cab": "Sedan",
-      "otp": "1234"
+      "otp1": "1234",
+      "otp2": "5678"
     },
   ];
 
@@ -85,7 +86,8 @@ class RideInProgress extends StatelessWidget {
               DataColumn(label: Text('Drop Location')),
               DataColumn(label: Text('Package')),
               DataColumn(label: Text('Cab')),
-              DataColumn(label: Text('OTP')),
+              DataColumn(label: Text('Start OTP')),
+              DataColumn(label: Text('End OTP')),
             ],
             rows: progressinfo
                 .map((e) => DataRow(cells: [
@@ -138,7 +140,13 @@ class RideInProgress extends StatelessWidget {
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["otp"]),
+                        text: (e["otp1"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["otp2"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,

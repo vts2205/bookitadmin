@@ -21,7 +21,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case OverviewPageRoute:
       return _getPageRoute(OverviewPage());
     case ProfilePageRoute:
-      return _getPageRoute(const ProfilePage());
+      return _getPageRoute(ProfilePage());
     case SubAdminPageRoute:
       return _getPageRoute(SubAdminPage());
     case ClientPageRoute:

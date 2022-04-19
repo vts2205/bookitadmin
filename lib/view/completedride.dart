@@ -27,8 +27,11 @@ class CompletedRides extends StatelessWidget {
       "package": "local",
       "cab": "Mini",
       "km": "10",
-      "otp": "1234",
-      "invoice": "Print"
+      "amount": "100",
+      "otp1": "1234",
+      "otp2": "1234",
+      "feedback": "good",
+      "invoice": "Download"
     },
   ];
 
@@ -95,7 +98,10 @@ class CompletedRides extends StatelessWidget {
               DataColumn(label: Text('Package')),
               DataColumn(label: Text('Cab')),
               DataColumn(label: Text('KM')),
-              DataColumn(label: Text('OTP')),
+              DataColumn(label: Text('Amount')),
+              DataColumn(label: Text('Start OTP')),
+              DataColumn(label: Text('End OTP')),
+              DataColumn(label: Text('Feedback')),
               DataColumn(label: Text('Invoice')),
             ],
             rows: completeinfo
@@ -155,7 +161,25 @@ class CompletedRides extends StatelessWidget {
                         color: Colors.black,
                       )),
                       DataCell(CustomText(
-                        text: (e["otp"]),
+                        text: (e["amount"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["otp1"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["otp2"]),
+                        weight: FontWeight.normal,
+                        size: 12,
+                        color: Colors.black,
+                      )),
+                      DataCell(CustomText(
+                        text: (e["feedback"]),
                         weight: FontWeight.normal,
                         size: 12,
                         color: Colors.black,
