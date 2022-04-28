@@ -1,44 +1,51 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:bookitadminpanel/constants/controllers.dart';
 import 'package:bookitadminpanel/constants/style.dart';
 import 'package:bookitadminpanel/helpers/responsiveness.dart';
+import 'package:bookitadminpanel/model/sub_admin_list_model.dart';
+import 'package:bookitadminpanel/services/apiservices.dart';
 import 'package:bookitadminpanel/widgets/custom_text.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
-class SubAdminPage extends StatelessWidget {
+class SubAdminPage extends StatefulWidget {
   SubAdminPage({Key key}) : super(key: key);
 
-  final List<Map<String, String>> subadmininfo = [
-    {
-      "id": "001",
-      "name": "nivy",
-      "phone": "6382136565",
-      "designation": "Manager",
-      "email": "nivy@gmail.com",
-      "password": "nivy123",
-      "action": "block"
-    },
-    {
-      "id": "002",
-      "name": "priya",
-      "phone": "7867997754",
-      "designation": "Manager",
-      "email": "priya@gmail.com",
-      "password": "priya123",
-      "action": "block"
-    },
-    {
-      "id": "003",
-      "name": "arun",
-      "phone": "6382136556",
-      "designation": "manager",
-      "email": "arun@gmail.com",
-      "password": "arun123",
-      "action": "block"
-    },
-  ];
+  @override
+  State<SubAdminPage> createState() => _SubAdminPageState();
+}
+
+class _SubAdminPageState extends State<SubAdminPage> {
+  final name = TextEditingController();
+  final phonenumber = TextEditingController();
+  final designation = TextEditingController();
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final box = GetStorage();
+
+  SubAdminListModel subAdminList;
+  var isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    subAdminList = (await APIService().subAdminList());
+    if (subAdminList != null) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +110,8 @@ class SubAdminPage extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: TextField(
+              child: TextFormField(
+                controller: name,
                 cursorColor: green,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10),
@@ -115,7 +123,8 @@ class SubAdminPage extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: TextField(
+              child: TextFormField(
+                controller: phonenumber,
                 cursorColor: green,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10),
@@ -127,7 +136,8 @@ class SubAdminPage extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: TextField(
+              child: TextFormField(
+                controller: designation,
                 cursorColor: green,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10),
@@ -143,7 +153,8 @@ class SubAdminPage extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: TextField(
+              child: TextFormField(
+                controller: email,
                 cursorColor: green,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10),
@@ -155,7 +166,8 @@ class SubAdminPage extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: TextField(
+              child: TextFormField(
+                controller: password,
                 cursorColor: green,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10),
@@ -175,8 +187,34 @@ class SubAdminPage extends StatelessWidget {
                   ),
                   TextButton(
                       onPressed: () async {
-                        final result = FilePickerWeb.platform.pickFiles();
-                        if (result == null) return;
+                        FilePickerResult result;
+
+                        try {
+                          result = await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: [
+                              'jpg',
+                              'pdf',
+                              'doc',
+                              'docx',
+                              'xls',
+                              'xlsx',
+                              'txt'
+                            ],
+                          );
+                        } catch (e) {
+                          print(e);
+                        }
+
+                        if (result != null) {
+                          try {
+                            String filename = result.files.single.name;
+                            print('file.name.......');
+                            print(filename);
+                          } catch (e) {
+                            print(e);
+                          }
+                        }
                       },
                       child: Text(
                         'Upload',
@@ -191,7 +229,22 @@ class SubAdminPage extends StatelessWidget {
             Expanded(
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: blue),
-                    onPressed: () {},
+                    onPressed: () async {
+                      var data = await APIService().createSubAdmin(
+                        name.text,
+                        phonenumber.text,
+                        designation.text,
+                        email.text,
+                        password.text,
+                      );
+                      if (data['success'] == true) {
+                        box.write("token", data["token"]);
+                        print('success');
+                      } else {
+                        print('failed');
+                        return null;
+                      }
+                    },
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.30,
                       height: 45,
@@ -219,7 +272,8 @@ class SubAdminPage extends StatelessWidget {
               TextStyle(fontSize: 20, color: blue, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 20),
-        TextField(
+        TextFormField(
+          controller: name,
           cursorColor: green,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(10),
@@ -229,7 +283,8 @@ class SubAdminPage extends StatelessWidget {
                   OutlineInputBorder(borderSide: BorderSide(color: green))),
         ),
         const SizedBox(height: 10),
-        TextField(
+        TextFormField(
+          controller: phonenumber,
           cursorColor: green,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(10),
@@ -239,7 +294,8 @@ class SubAdminPage extends StatelessWidget {
                   OutlineInputBorder(borderSide: BorderSide(color: green))),
         ),
         const SizedBox(height: 10),
-        TextField(
+        TextFormField(
+          controller: designation,
           cursorColor: green,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(10),
@@ -249,7 +305,8 @@ class SubAdminPage extends StatelessWidget {
                   OutlineInputBorder(borderSide: BorderSide(color: green))),
         ),
         const SizedBox(height: 10),
-        TextField(
+        TextFormField(
+          controller: email,
           cursorColor: green,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(10),
@@ -259,7 +316,8 @@ class SubAdminPage extends StatelessWidget {
                   OutlineInputBorder(borderSide: BorderSide(color: green))),
         ),
         const SizedBox(height: 10),
-        TextField(
+        TextFormField(
+          controller: password,
           cursorColor: green,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(10),
@@ -295,7 +353,21 @@ class SubAdminPage extends StatelessWidget {
         Center(
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(primary: blue),
-              onPressed: () {},
+              onPressed: () async {
+                var data = await APIService().createSubAdmin(
+                    name.text,
+                    phonenumber.text,
+                    designation.text,
+                    email.text,
+                    password.text);
+                if (data['success'] == true) {
+                  box.write("token", data["token"]);
+                  print('success');
+                } else {
+                  print('failed');
+                  return null;
+                }
+              },
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.30,
                 height: 45,
@@ -327,80 +399,98 @@ class SubAdminPage extends StatelessWidget {
         ),
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(bottom: 30),
-        child: DataTable2(
-            columnSpacing: 12,
-            horizontalMargin: 12,
-            minWidth: 600,
-            columns: const [
-              DataColumn(label: Text("ID")),
-              DataColumn(
-                label: Text("Name"),
-              ),
-              DataColumn(label: Text("Phone Number")),
-              DataColumn(
-                label: Text('Designation'),
-              ),
-              DataColumn(label: Text("Email")),
-              DataColumn(
-                label: Text('Password'),
-              ),
-              DataColumn(
-                label: Text('Action'),
-              ),
-            ],
-            rows: subadmininfo
-                .map((e) => DataRow(cells: [
-                      DataCell(CustomText(
-                        text: (e["id"]),
-                        size: 12,
-                        weight: FontWeight.normal,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["name"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["phone"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["designation"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["email"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(CustomText(
-                        text: (e["password"]),
-                        weight: FontWeight.normal,
-                        size: 12,
-                        color: Colors.black,
-                      )),
-                      DataCell(Container(
-                          decoration: BoxDecoration(
-                            color: light,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: active, width: .5),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          child: CustomText(
-                            text: (e["action"]),
-                            color: active.withOpacity(.7),
-                            weight: FontWeight.bold,
-                            size: 12,
-                          ))),
-                    ]))
-                .toList()));
+        child: Visibility(
+          visible: isLoading,
+          child: isLoading == false
+              ? Container()
+              : DataTable2(
+                  columnSpacing: 12,
+                  horizontalMargin: 12,
+                  minWidth: 600,
+                  columns: const [
+                    DataColumn(label: Text("ID")),
+                    DataColumn(label: Text("Image")),
+                    DataColumn(
+                      label: Text("Name"),
+                    ),
+                    DataColumn(label: Text("Phone Number")),
+                    DataColumn(
+                      label: Text('Designation'),
+                    ),
+                    DataColumn(label: Text("Email")),
+                    DataColumn(
+                      label: Text('Password'),
+                    ),
+                    DataColumn(
+                      label: Text('Action'),
+                    ),
+                  ],
+                  rows: subAdminList.userValue
+                      .map((e) => DataRow(cells: [
+                            DataCell(CustomText(
+                              text: (e.id.toString()),
+                              size: 12,
+                              weight: FontWeight.normal,
+                              color: Colors.black,
+                            )),
+                            DataCell(CircleAvatar(
+                              radius: 20,
+                              child: CustomText(
+                                text: (e.image),
+                                size: 12,
+                                weight: FontWeight.normal,
+                                color: Colors.black,
+                              ),
+                            )),
+                            DataCell(CustomText(
+                              text: (e.name),
+                              weight: FontWeight.normal,
+                              size: 12,
+                              color: Colors.black,
+                            )),
+                            DataCell(CustomText(
+                              text: (e.phonenumber),
+                              weight: FontWeight.normal,
+                              size: 12,
+                              color: Colors.black,
+                            )),
+                            DataCell(CustomText(
+                              text: (e.designation),
+                              weight: FontWeight.normal,
+                              size: 12,
+                              color: Colors.black,
+                            )),
+                            DataCell(CustomText(
+                              text: (e.email),
+                              weight: FontWeight.normal,
+                              size: 12,
+                              color: Colors.black,
+                            )),
+                            DataCell(CustomText(
+                              text: (e.passwordText),
+                              weight: FontWeight.normal,
+                              size: 12,
+                              color: Colors.black,
+                            )),
+                            DataCell(Container(
+                                decoration: BoxDecoration(
+                                  color: light,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: active, width: .5),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
+                                child: CustomText(
+                                  text: (e.status.toString()),
+                                  color: active.withOpacity(.7),
+                                  weight: FontWeight.bold,
+                                  size: 12,
+                                ))),
+                          ]))
+                      .toList()),
+          replacement: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        ));
   }
 }

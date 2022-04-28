@@ -64,8 +64,9 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-                    child: TextField(
+                    child: TextFormField(
                       controller: controller.namecontroller,
+                      cursorColor: green,
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(10),
                           border: const OutlineInputBorder(),
@@ -88,7 +89,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-                    child: TextField(
+                    child: TextFormField(
                       controller: controller.phonecontroller,
                       cursorColor: green,
                       decoration: InputDecoration(
@@ -113,7 +114,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-                    child: TextField(
+                    child: TextFormField(
                       controller: controller.emailcontroller,
                       cursorColor: green,
                       decoration: InputDecoration(
@@ -138,7 +139,8 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-                    child: TextField(
+                    child: TextFormField(
+                      controller: controller.passwordcontroller,
                       cursorColor: green,
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(10),
@@ -150,38 +152,20 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 15),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: CustomText(
-                      text: "Change Password :",
-                      color: blue,
-                      weight: FontWeight.w900,
-                    ),
-                  ),
-                  Flexible(
-                    child: TextField(
-                      cursorColor: green,
-                      decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(10),
-                          border: const OutlineInputBorder(),
-                          hintText: "Enter new password",
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: green))),
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(height: 30),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: blue, padding: const EdgeInsets.all(15)),
                   onPressed: () {
-                    // if(controller.namecontroller.text.trim()!=''||controller.phonecontroller.text.trim()!=''||controller.emailcontroller.text.trim()!=''{
-                    //
-                    // })
+                    if (controller.namecontroller.text.trim() != '' ||
+                        controller.phonecontroller.text.trim() != '' ||
+                        controller.emailcontroller.text.trim() != '' ||
+                        controller.passwordcontroller.text.trim() != '') {
+                      controller.fetchProfileUpdate();
+                    } else {
+                      print('Failed');
+                      return null;
+                    }
                   },
                   child: const Text(
                     "Update",

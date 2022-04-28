@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:bookitadminpanel/constants/api.dart';
+import 'package:bookitadminpanel/model/driver_list_model.dart';
 import 'package:bookitadminpanel/model/get_profile_model.dart';
+import 'package:bookitadminpanel/model/sub_admin_list_model.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,16 +20,17 @@ class APIService {
     return convertedDataToJson;
   }
 
-  Future<GetProfileModel> FetchProfile() async {
+  Future<GetProfileModel> fetchProfile() async {
     var client = http.Client();
     var token = box.read('token');
     var completeUrl = APIConstants.baseUrl + APIConstants.getProfile;
     var uri = Uri.parse(completeUrl);
     try {
       final response =
-          await client.get(uri, headers: {'Authorization': 'Bearer $token'});
+          await client.get(uri, headers: {'Authorization': '$token'});
       print('token:$token');
-      print('....Map....${response.body.toString()}');
+      print(response.body);
+      print('StatusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         print(response.body.toString());
         GetProfileModel getProfileModel =
@@ -39,6 +42,99 @@ class APIService {
       }
     } catch (e) {
       print(e.toString());
+      return null;
+    }
+  }
+
+  Future updateProfile(String name, phonenumber, email, password) async {
+    var token = box.read('token');
+    var client = http.Client();
+    var completeUrl = APIConstants.baseUrl + APIConstants.profileUpdate;
+    var uri = Uri.parse(completeUrl);
+    final response = await client.put(uri, headers: {
+      'Authorization': '$token'
+    }, body: {
+      'name': email,
+      'phonenumber': phonenumber,
+      'email': email,
+      'password': password
+    });
+    var convertedDataToJson = json.decode(response.body);
+    print(convertedDataToJson);
+    return convertedDataToJson;
+  }
+
+  Future createSubAdmin(
+      String name, phonenumber, designation, email, password) async {
+    var token = box.read('token');
+    var client = http.Client();
+    var completeUrl = APIConstants.baseUrl + APIConstants.subAdmin;
+    var uri = Uri.parse(completeUrl);
+    final response = await client.post(uri, headers: {
+      'Authorization': '$token'
+    }, body: {
+      'name': name,
+      'phonenumber': phonenumber,
+      'designation': designation,
+      'email': email,
+      'password': password,
+    });
+    var convertedDataToJson = json.decode(response.body);
+    print(convertedDataToJson);
+    return convertedDataToJson;
+  }
+
+  Future<SubAdminListModel> subAdminList() async {
+    var token = box.read('token');
+    var client = http.Client();
+    var completeUrl = APIConstants.baseUrl + APIConstants.subAdmin;
+    var uri = Uri.parse(completeUrl);
+    final response =
+        await client.get(uri, headers: {'Authorization': '$token'});
+    print('token:$token');
+    print(response.body);
+    print('StatusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      var json = response.body;
+      return subAdminListModelFromJson(json);
+    } else {
+      return null;
+    }
+  }
+
+  Future createDriver(String name, email, phonenumber, location) async {
+    var token = box.read('token');
+    var client = http.Client();
+    var completeUrl = APIConstants.baseUrl + APIConstants.driver;
+    var uri = Uri.parse(completeUrl);
+    final response = await client.post(uri, headers: {
+      'Authorization': '$token'
+    }, body: {
+      'name': name,
+      'email': email,
+      'phonenumber': phonenumber,
+      'location': location
+    });
+    var convertedDataToJson = json.decode(response.body);
+    print(convertedDataToJson);
+    return convertedDataToJson;
+  }
+
+  Future<DriverListModel> driverList() async {
+    var token = box.read('token');
+    var client = http.Client();
+    var completeUrl = APIConstants.baseUrl + APIConstants.driver;
+    var uri = Uri.parse(completeUrl);
+    final response =
+        await client.get(uri, headers: {'Authorization': '$token'});
+    print('token:$token');
+    print(response.body);
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      var json = response.body;
+      return driverListModelFromJson(json);
+    } else {
       return null;
     }
   }

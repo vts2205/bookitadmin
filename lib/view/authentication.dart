@@ -7,8 +7,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'forgotpassword.dart';
-
 class AuthenticationPage extends StatelessWidget {
   AuthenticationPage({Key key}) : super(key: key);
 
@@ -119,31 +117,6 @@ class AuthenticationPage extends StatelessWidget {
                     }
                     return null;
                   },
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(value: true, onChanged: (value) {}),
-                        const CustomText(
-                          text: "Remember Me",
-                          size: 15,
-                          weight: FontWeight.normal,
-                          color: Colors.black,
-                        ),
-                      ],
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          Get.to(ForgotPassword());
-                        },
-                        child: Text("Forgot Password ?",
-                            style: TextStyle(fontSize: 15, color: blue)))
-                  ],
                 ),
                 const SizedBox(
                   height: 15,
