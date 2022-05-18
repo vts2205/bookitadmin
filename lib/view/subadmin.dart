@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -13,6 +14,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+//import 'package:path_provider/path_provider.dart';
 
 class SubAdminPage extends StatefulWidget {
   SubAdminPage({Key key}) : super(key: key);
@@ -28,6 +32,10 @@ class _SubAdminPageState extends State<SubAdminPage> {
   final email = TextEditingController();
   final password = TextEditingController();
   final box = GetStorage();
+
+  //Uint8List filePath;
+  //File imageFile;
+  PlatformFile imageFile;
 
   SubAdminListModel subAdminList;
   var isLoading = false;
@@ -192,6 +200,7 @@ class _SubAdminPageState extends State<SubAdminPage> {
                         try {
                           result = await FilePicker.platform.pickFiles(
                             type: FileType.custom,
+                            withReadStream: true,
                             allowedExtensions: [
                               'jpg',
                               'pdf',
@@ -209,8 +218,10 @@ class _SubAdminPageState extends State<SubAdminPage> {
                         if (result != null) {
                           try {
                             String filename = result.files.single.name;
+                            imageFile = result.files.first;
                             print('file.name.......');
                             print(filename);
+                            print(imageFile);
                           } catch (e) {
                             print(e);
                           }
@@ -230,19 +241,35 @@ class _SubAdminPageState extends State<SubAdminPage> {
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: blue),
                     onPressed: () async {
-                      var data = await APIService().createSubAdmin(
-                        name.text,
-                        phonenumber.text,
-                        designation.text,
-                        email.text,
-                        password.text,
-                      );
-                      if (data['success'] == true) {
-                        box.write("token", data["token"]);
-                        print('success');
+                      if (imageFile == null) {
+                        var data = await APIService().createSubAdmin(
+                            name.text,
+                            phonenumber.text,
+                            designation.text,
+                            email.text,
+                            password.text,
+                            '');
+                        if (data['success'] == true) {
+                          box.write("token", data["token"]);
+                          print('success');
+                          print(data);
+                        } else {
+                          print('failed');
+                          return null;
+                        }
                       } else {
-                        print('failed');
-                        return null;
+                        var data = await APIService().uploadImage(
+                            imageFile.readStream,
+                            imageFile.size,
+                            "imagefile",
+                            'http://3.109.60.160:8800/admin/uploadfile');
+                        if (data['success'] == true) {
+                          print('success');
+                          print(data);
+                        } else {
+                          print('failed');
+                          return null;
+                        }
                       }
                     },
                     child: Container(
@@ -353,21 +380,22 @@ class _SubAdminPageState extends State<SubAdminPage> {
         Center(
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(primary: blue),
-              onPressed: () async {
-                var data = await APIService().createSubAdmin(
-                    name.text,
-                    phonenumber.text,
-                    designation.text,
-                    email.text,
-                    password.text);
-                if (data['success'] == true) {
-                  box.write("token", data["token"]);
-                  print('success');
-                } else {
-                  print('failed');
-                  return null;
-                }
-              },
+              // onPressed: () async {
+              //   var data = await APIService().createSubAdmin(
+              //       name.text,
+              //       phonenumber.text,
+              //       designation.text,
+              //       email.text,
+              //       password.text,
+              //       filePath);
+              //   if (data['success'] == true) {
+              //     box.write("token", data["token"]);
+              //     print('success');
+              //   } else {
+              //     print('failed');
+              //     return null;
+              //   }
+              // },
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.30,
                 height: 45,
@@ -435,12 +463,13 @@ class _SubAdminPageState extends State<SubAdminPage> {
                             )),
                             DataCell(CircleAvatar(
                               radius: 20,
-                              child: CustomText(
-                                text: (e.image),
-                                size: 12,
-                                weight: FontWeight.normal,
-                                color: Colors.black,
-                              ),
+                              child: Image.network(e.image),
+                              // CustomText(
+                              //   text: (e.image),
+                              //   size: 12,
+                              //   weight: FontWeight.normal,
+                              //   color: Colors.black,
+                              // ),
                             )),
                             DataCell(CustomText(
                               text: (e.name),

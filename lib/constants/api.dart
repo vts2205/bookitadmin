@@ -1,5 +1,5 @@
 class APIConstants {
-  static const baseUrl = 'http://3.109.60.160:8800';
+  static const baseUrl = 'http://43.204.29.170:8800';
 
   static const login = '/admin/login';
   static const getProfile = '/admin/getmyprofiledata';
@@ -8,4 +8,8 @@ class APIConstants {
   static const subAdminList = '/admin/subadmin';
   static const driver = '/admin/driver';
   static const driverList = '/admin/driver';
+  static const progressRidesList = '/admin/progressrides';
+  static const cancelledRidesList = '/admin/cancelledrides';
+  static const completedRidesList = '/admin/successrides';
+  //static const rideHistoryList = '/admin/'
 }

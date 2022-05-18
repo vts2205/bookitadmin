@@ -32,7 +32,15 @@ class MenuController extends GetxController {
       case ClientPageRoute:
         return _customIcon(Icons.person_outline_outlined, itemName);
       case DriversPageRoute:
-        return _customIcon(Icons.drive_eta, itemName);
+        return _customIcon(Icons.group_add_outlined, itemName);
+      case DriversListPageRoute:
+        return _customIcon(Icons.people_alt_outlined, itemName);
+      case CarDocumentPageRoute:
+        return _customIcon(Icons.receipt, itemName);
+      case DriverDocumentPageRoute:
+        return _customIcon(Icons.receipt, itemName);
+      case OwnerDocumentPageRoute:
+        return _customIcon(Icons.receipt, itemName);
       case DriverWalletTransactionRoute:
         return _customIcon(Icons.account_balance_wallet_outlined, itemName);
       case UsersPageRoute:

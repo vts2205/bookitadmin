@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:html';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:bookitadminpanel/constants/api.dart';
 import 'package:bookitadminpanel/model/driver_list_model.dart';
 import 'package:bookitadminpanel/model/get_profile_model.dart';
 import 'package:bookitadminpanel/model/sub_admin_list_model.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:path_provider/path_provider.dart';
 
 class APIService {
   final box = GetStorage();
@@ -64,24 +69,36 @@ class APIService {
     return convertedDataToJson;
   }
 
-  Future createSubAdmin(
-      String name, phonenumber, designation, email, password) async {
+  Future uploadImage(Stream<List<int>> imagefile, int fileLength,
+      String fileName, String url) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files.add(http.MultipartFile('Photofile', imagefile, fileLength,
+        filename: fileName));
+    var res = await request.send();
+    String result = await res.stream.bytesToString();
+    print(result);
+    print(res);
+  }
+
+  Future createSubAdmin(String name, phonenumber, designation, email, password,
+      imageFilePath) async {
     var token = box.read('token');
-    var client = http.Client();
     var completeUrl = APIConstants.baseUrl + APIConstants.subAdmin;
     var uri = Uri.parse(completeUrl);
-    final response = await client.post(uri, headers: {
-      'Authorization': '$token'
-    }, body: {
-      'name': name,
-      'phonenumber': phonenumber,
-      'designation': designation,
-      'email': email,
-      'password': password,
+    var request = http.MultipartRequest("POST", uri);
+    request.headers.addAll({'Authorization': '$token'});
+    request.fields['name'] = name;
+    request.fields['phonenumber'] = phonenumber;
+    request.fields['designation'] = designation;
+    request.fields['email'] = email;
+    request.fields['password'] = password;
+    request.fields['image'] = imageFilePath;
+    print(imageFilePath);
+    request.send().then((response) {
+      print(response);
+      print(response.statusCode);
+      if (response.statusCode == 200) print("Uploaded!");
     });
-    var convertedDataToJson = json.decode(response.body);
-    print(convertedDataToJson);
-    return convertedDataToJson;
   }
 
   Future<SubAdminListModel> subAdminList() async {

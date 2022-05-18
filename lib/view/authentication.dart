@@ -122,15 +122,17 @@ class AuthenticationPage extends StatelessWidget {
                   height: 15,
                 ),
                 InkWell(
-                  onTap: () async {
-                    var data = await APIService()
-                        .createLogin(email.text, password.text);
-                    if (data['success'] == true) {
-                      box.write("token", data["token"]);
-                      Get.to(SiteLayout());
-                    } else {
-                      print('...failed...');
-                    }
+                  onTap: ()
+                      // async
+                      {
+                    // var data = await APIService()
+                    //     .createLogin(email.text, password.text);
+                    // if (data['success'] == true) {
+                    //   box.write("token", data["token"]);
+                    Get.to(SiteLayout());
+                    // } else {
+                    //   print('...failed...');
+                    // }
                   },
                   child: Container(
                     decoration: BoxDecoration(
