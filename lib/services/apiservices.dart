@@ -3,6 +3,7 @@ import 'dart:html';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:bookitadminpanel/constants/api.dart';
+import 'package:bookitadminpanel/model/add_driver_list_model.dart';
 import 'package:bookitadminpanel/model/driver_list_model.dart';
 import 'package:bookitadminpanel/model/get_profile_model.dart';
 import 'package:bookitadminpanel/model/sub_admin_list_model.dart';
@@ -154,5 +155,48 @@ class APIService {
     } else {
       return null;
     }
+  }
+
+  Future<AddDriverListModel> addDriverList() async {
+    print('====API called====');
+    var client = http.Client();
+    var uri = Uri.parse('http://3.110.225.148:9200/api/mobile/admin/addDriver');
+    print(uri);
+    final response = await client.get(uri);
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      var json = response.body;
+      return addDriverListModelFromJson(json);
+    } else {
+      return null;
+    }
+  }
+
+  Future driverApproval(id) async {
+    print('====API called====');
+    var driverId = id;
+    var client = http.Client();
+    var uri =
+        Uri.parse('http://3.110.225.148:9200/api/mobile/admin/driverApproval');
+    print(uri);
+    final response = await client
+        .post(uri, body: {"driverId": "$driverId", "status": "confirmed"});
+    var convertedDataToJson = jsonDecode(response.body);
+    print(convertedDataToJson);
+    return convertedDataToJson;
+  }
+
+  Future driverReject(id) async {
+    print('====API called====');
+    var driverId = id;
+    var client = http.Client();
+    var uri =
+        Uri.parse('http://3.110.225.148:9200/api/mobile/admin/driverApproval');
+    print(uri);
+    final response = await client
+        .post(uri, body: {"driverId": "$driverId", "status": "rejected"});
+    var convertedDataToJson = jsonDecode(response.body);
+    print(convertedDataToJson);
+    return convertedDataToJson;
   }
 }
