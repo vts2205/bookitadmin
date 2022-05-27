@@ -1,28 +1,18 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_downloader_web/image_downloader_web.dart';
-
 import 'package:bookitadminpanel/constants/controllers.dart';
 import 'package:bookitadminpanel/constants/style.dart';
 import 'package:bookitadminpanel/helpers/responsiveness.dart';
 import 'package:bookitadminpanel/model/add_driver_list_model.dart';
-import 'package:bookitadminpanel/model/driver_list_model.dart';
 import 'package:bookitadminpanel/services/apiservices.dart';
 import 'package:bookitadminpanel/widgets/custom_text.dart';
-import 'package:data_table_2/data_table_2.dart';
-import 'package:dio/dio.dart';
-import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:http/http.dart' as http;
 
 class DriversPage extends StatefulWidget {
-  DriversPage({Key key}) : super(key: key);
+  const DriversPage({Key key}) : super(key: key);
 
   @override
   State<DriversPage> createState() => _DriversPageState();

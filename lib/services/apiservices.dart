@@ -4,8 +4,13 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:bookitadminpanel/constants/api.dart';
 import 'package:bookitadminpanel/model/add_driver_list_model.dart';
+import 'package:bookitadminpanel/model/approved_drivers_list_model.dart';
+import 'package:bookitadminpanel/model/car_documents_list_model.dart';
+import 'package:bookitadminpanel/model/driver_documents_list_model.dart';
 import 'package:bookitadminpanel/model/driver_list_model.dart';
 import 'package:bookitadminpanel/model/get_profile_model.dart';
+import 'package:bookitadminpanel/model/owner_documents_list_model.dart';
+import 'package:bookitadminpanel/model/rejected_drivers_list_model.dart';
 import 'package:bookitadminpanel/model/sub_admin_list_model.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -198,5 +203,87 @@ class APIService {
     var convertedDataToJson = jsonDecode(response.body);
     print(convertedDataToJson);
     return convertedDataToJson;
+  }
+
+  Future<ApprovedDriversListModel> approvedDriversList() async {
+    var client = http.Client();
+    var completeUrl = 'http://3.110.225.148:9200/api/mobile/admin/approvedList';
+    var uri = Uri.parse(completeUrl);
+    final response = await client.get(uri);
+    print(response.body);
+    print('StatusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      var json = response.body;
+      return approvedDriversListModelFromJson(json);
+    } else {
+      return null;
+    }
+  }
+
+  Future<RejectedDriversListModel> rejectedDriversList() async {
+    var client = http.Client();
+    var completeUrl = 'http://3.110.225.148:9200/api/mobile/admin/rejectedList';
+    var uri = Uri.parse(completeUrl);
+    final response = await client.get(uri);
+    print(response.body);
+    print('StatusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      var json = response.body;
+      return rejectedDriversListModelFromJson(json);
+    } else {
+      return null;
+    }
+  }
+
+  Future<CarDocumentsListModel> carDocumentsList() async {
+    var client = http.Client();
+    var completeUrl = 'http://3.110.225.148:9200/api/mobile/admin/carDocuments';
+    var uri = Uri.parse(completeUrl);
+    final response = await client.get(uri);
+    print(response.body);
+    print('StatusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      var json = response.body;
+      return carDocumentsListModelFromJson(json);
+    } else {
+      return null;
+    }
+  }
+
+  Future<DriverDocumentsListModel> driverDocumentsList() async {
+    var client = http.Client();
+    var completeUrl =
+        'http://3.110.225.148:9200/api/mobile/admin/driverDocuments';
+    var uri = Uri.parse(completeUrl);
+    final response = await client.get(uri);
+    print(response.body);
+    print('StatusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      var json = response.body;
+      return driverDocumentsListModelFromJson(json);
+    } else {
+      return null;
+    }
+  }
+
+  Future<OwnerDocumentsListModel> ownerDocumentsList() async {
+    var client = http.Client();
+    var completeUrl =
+        'http://3.110.225.148:9200/api/mobile/admin/ownerDocuments';
+    var uri = Uri.parse(completeUrl);
+    final response = await client.get(uri);
+    print(response.body);
+    print('StatusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print(response.body.toString());
+      var json = response.body;
+      return ownerDocumentsListModelFromJson(json);
+    } else {
+      return null;
+    }
   }
 }

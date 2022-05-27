@@ -5,7 +5,7 @@ import 'package:bookitadminpanel/view/cardocument.dart';
 import 'package:bookitadminpanel/view/completedride.dart';
 import 'package:bookitadminpanel/view/driver_wallet_transaction.dart';
 import 'package:bookitadminpanel/view/driverdocument.dart';
-import 'package:bookitadminpanel/view/driverlistpage.dart';
+import 'package:bookitadminpanel/view/approved_drivers_list.dart';
 import 'package:bookitadminpanel/view/drivers.dart';
 import 'package:bookitadminpanel/view/location.dart';
 import 'package:bookitadminpanel/view/manual_booking_history.dart';
@@ -13,6 +13,7 @@ import 'package:bookitadminpanel/view/overview.dart';
 import 'package:bookitadminpanel/view/ownerdocument.dart';
 import 'package:bookitadminpanel/view/profile.dart';
 import 'package:bookitadminpanel/view/progressride.dart';
+import 'package:bookitadminpanel/view/rejected_drivers_list.dart';
 import 'package:bookitadminpanel/view/ridehistory.dart';
 import 'package:bookitadminpanel/view/riderequest.dart';
 import 'package:bookitadminpanel/view/scheduledride.dart';
@@ -32,8 +33,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(VendorPage());
     case DriversPageRoute:
       return _getPageRoute(DriversPage());
-    case DriversListPageRoute:
+    case ApprovedDriversListPageRoute:
       return _getPageRoute(DriverListPage());
+    case RejectedDriversListPageRoute:
+      return _getPageRoute(RejectedDriverListPage());
     case CarDocumentPageRoute:
       return _getPageRoute(CarDocumentPage());
     case DriverDocumentPageRoute:

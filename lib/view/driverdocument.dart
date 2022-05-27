@@ -1,26 +1,40 @@
 import 'package:bookitadminpanel/constants/controllers.dart';
 import 'package:bookitadminpanel/constants/style.dart';
 import 'package:bookitadminpanel/helpers/responsiveness.dart';
+import 'package:bookitadminpanel/model/car_documents_list_model.dart';
+import 'package:bookitadminpanel/model/driver_documents_list_model.dart';
+import 'package:bookitadminpanel/services/apiservices.dart';
 import 'package:bookitadminpanel/widgets/custom_text.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DriverDocumentPage extends StatelessWidget {
-  DriverDocumentPage({Key key}) : super(key: key);
+class DriverDocumentPage extends StatefulWidget {
+  const DriverDocumentPage({Key key}) : super(key: key);
 
-  final List<Map<String, String>> driverDoc = [
-    {
-      "id": "1",
-      "name": "nivy",
-      "profileimg": "view",
-      "licencefront": "view",
-      "licenceback": "view",
-      "aadhaarfront": "view",
-      "aadhaarback": "view",
-      "action": "Delete"
+  @override
+  State<DriverDocumentPage> createState() => _DriverDocumentPageState();
+}
+
+class _DriverDocumentPageState extends State<DriverDocumentPage> {
+  DriverDocumentsListModel driverDocumentsListModel;
+
+  var isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    driverDocumentsListModel = (await APIService().driverDocumentsList());
+    if (driverDocumentsListModel != null) {
+      setState(() {
+        isLoading = true;
+      });
     }
-  ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +63,7 @@ class DriverDocumentPage extends StatelessWidget {
           ),
           Expanded(
               child: ListView(
-            children: [buildDriverDocTable()],
+            children: [buildCarDocTable()],
           )),
         ],
       ),
@@ -75,143 +89,96 @@ class DriverDocumentPage extends StatelessWidget {
     );
   }
 
-  buildDriverDocTable() {
+  buildCarDocTable() {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: active.withOpacity(.4), width: .5),
-        boxShadow: [
-          BoxShadow(
-              offset: const Offset(0, 6),
-              color: lightGrey.withOpacity(.1),
-              blurRadius: 12)
-        ],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(bottom: 30),
-      child:
-          // Visibility(
-          //   visible: isLoading,
-          //   child: isLoading == false
-          //       ? Container()
-          //       :
-          DataTable2(
-              columnSpacing: 12,
-              horizontalMargin: 12,
-              minWidth: 600,
-              columns: const [
-                DataColumn(label: Text("Id")),
-                DataColumn(label: Text("Driver Name")),
-                DataColumn(
-                  label: Text("Profile Image"),
-                ),
-                DataColumn(label: Text("Licence Front")),
-                DataColumn(label: Text("Licence Back")),
-                DataColumn(label: Text("Aadhaar Front")),
-                DataColumn(
-                  label: Text('Aadhaar Back'),
-                ),
-                DataColumn(
-                  label: Text('Action'),
-                ),
-              ],
-              rows: driverDoc
-                  .map((e) => DataRow(cells: [
-                        DataCell(CustomText(
-                          text: (e['id']),
-                          size: 12,
-                          weight: FontWeight.normal,
-                          color: Colors.black,
-                        )),
-                        DataCell(CustomText(
-                          text: (e['name']),
-                          size: 12,
-                          weight: FontWeight.normal,
-                          color: Colors.black,
-                        )),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["profileimg"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: active.withOpacity(.4), width: .5),
+          boxShadow: [
+            BoxShadow(
+                offset: const Offset(0, 6),
+                color: lightGrey.withOpacity(.1),
+                blurRadius: 12)
+          ],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(bottom: 30),
+        child: Visibility(
+          visible: isLoading,
+          child: isLoading == false
+              ? Container()
+              : DataTable2(
+                  columnSpacing: 5,
+                  horizontalMargin: 12,
+                  minWidth: 600,
+                  columns: const [
+                    DataColumn(label: Text("Id")),
+                    DataColumn(label: Text("Driver Name")),
+                    DataColumn(label: Text("Driver Contact")),
+                    DataColumn(
+                      label: Text("Profile Image"),
+                    ),
+                    DataColumn(label: Text("Aadhaar Front")),
+                    DataColumn(label: Text("Aadhaar Back")),
+                    DataColumn(label: Text("License Front")),
+                    DataColumn(
+                      label: Text('License Back'),
+                    ),
+                    // DataColumn(
+                    //   label: Text('Action'),
+                    // ),
+                  ],
+                  rows: driverDocumentsListModel.body
+                      .map((e) => DataRow(cells: [
+                            DataCell(CustomText(
+                              text: (e.driverDriverId),
                               size: 12,
-                            ))),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["licencefront"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
+                              weight: FontWeight.normal,
+                              color: Colors.black,
+                            )),
+                            DataCell(CustomText(
+                              text: (e.driverName),
                               size: 12,
-                            ))),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["licenceback"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
+                              weight: FontWeight.normal,
+                              color: Colors.black,
+                            )),
+                            DataCell(CustomText(
+                              text: (e.driverContact),
                               size: 12,
-                            ))),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["aadhaarfront"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
-                              size: 12,
-                            ))),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["aadhaarback"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
-                              size: 12,
-                            ))),
-                        DataCell(ElevatedButton(
-                            style: ElevatedButton.styleFrom(primary: blue),
-                            onPressed: () {},
-                            child: CustomText(
-                              text: e['action'],
-                              color: Colors.white,
-                            )))
-                      ]))
-                  .toList()),
-      // replacement: const Center(
-      //   child: CircularProgressIndicator(),
-      // ),
-    );
+                              weight: FontWeight.normal,
+                              color: Colors.black,
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.profilePic),
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.aadharFront),
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.aadharBack),
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.licenseFront),
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.licenseBack),
+                            )),
+                          ]))
+                      .toList()),
+          replacement: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        ));
   }
 }

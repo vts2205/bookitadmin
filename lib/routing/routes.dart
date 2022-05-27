@@ -3,7 +3,8 @@ const ProfilePageRoute = "Profile";
 const SubAdminPageRoute = "Sub-Admin";
 const ClientPageRoute = "Vendors";
 const DriversPageRoute = "Add Drivers";
-const DriversListPageRoute = "Drivers";
+const ApprovedDriversListPageRoute = "Approved Drivers";
+const RejectedDriversListPageRoute = "Rejected Drivers";
 const CarDocumentPageRoute = "Car Documents";
 const DriverDocumentPageRoute = "Driver Documents";
 const OwnerDocumentPageRoute = "Owner Documents";
@@ -25,7 +26,8 @@ List sideMenuItems = [
   SubAdminPageRoute,
   ClientPageRoute,
   DriversPageRoute,
-  DriversListPageRoute,
+  ApprovedDriversListPageRoute,
+  RejectedDriversListPageRoute,
   CarDocumentPageRoute,
   DriverDocumentPageRoute,
   OwnerDocumentPageRoute,

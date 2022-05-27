@@ -1,27 +1,39 @@
 import 'package:bookitadminpanel/constants/controllers.dart';
 import 'package:bookitadminpanel/constants/style.dart';
 import 'package:bookitadminpanel/helpers/responsiveness.dart';
+import 'package:bookitadminpanel/model/car_documents_list_model.dart';
+import 'package:bookitadminpanel/services/apiservices.dart';
 import 'package:bookitadminpanel/widgets/custom_text.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CarDocumentPage extends StatelessWidget {
-  CarDocumentPage({Key key}) : super(key: key);
+class CarDocumentPage extends StatefulWidget {
+  const CarDocumentPage({Key key}) : super(key: key);
 
-  final List<Map<String, String>> carDoc = [
-    {
-      "id": "1",
-      "name": "nivy",
-      "frontimg": "view",
-      "chaseimg": "view",
-      "rcfront": "view",
-      "rcback": "view",
-      "insurance": "view",
-      "fccopy": "view",
-      "action": "Delete"
+  @override
+  State<CarDocumentPage> createState() => _CarDocumentPageState();
+}
+
+class _CarDocumentPageState extends State<CarDocumentPage> {
+  CarDocumentsListModel carDocumentsListModel;
+
+  var isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    carDocumentsListModel = (await APIService().carDocumentsList());
+    if (carDocumentsListModel != null) {
+      setState(() {
+        isLoading = true;
+      });
     }
-  ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,158 +90,102 @@ class CarDocumentPage extends StatelessWidget {
 
   buildCarDocTable() {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: active.withOpacity(.4), width: .5),
-        boxShadow: [
-          BoxShadow(
-              offset: const Offset(0, 6),
-              color: lightGrey.withOpacity(.1),
-              blurRadius: 12)
-        ],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(bottom: 30),
-      child:
-          // Visibility(
-          //   visible: isLoading,
-          //   child: isLoading == false
-          //       ? Container()
-          //       :
-          DataTable2(
-              columnSpacing: 12,
-              horizontalMargin: 12,
-              minWidth: 600,
-              columns: const [
-                DataColumn(label: Text("Id")),
-                DataColumn(label: Text("Driver Name")),
-                DataColumn(
-                  label: Text("Front Image"),
-                ),
-                DataColumn(label: Text("Chase Number Image")),
-                DataColumn(label: Text("RC Book Front")),
-                DataColumn(label: Text("RC Book back")),
-                DataColumn(
-                  label: Text('Insurance'),
-                ),
-                DataColumn(
-                  label: Text('FC Copy'),
-                ),
-                DataColumn(
-                  label: Text('Action'),
-                ),
-              ],
-              rows: carDoc
-                  .map((e) => DataRow(cells: [
-                        DataCell(CustomText(
-                          text: (e['id']),
-                          size: 12,
-                          weight: FontWeight.normal,
-                          color: Colors.black,
-                        )),
-                        DataCell(CustomText(
-                          text: (e['name']),
-                          size: 12,
-                          weight: FontWeight.normal,
-                          color: Colors.black,
-                        )),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["frontimg"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: active.withOpacity(.4), width: .5),
+          boxShadow: [
+            BoxShadow(
+                offset: const Offset(0, 6),
+                color: lightGrey.withOpacity(.1),
+                blurRadius: 12)
+          ],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(bottom: 30),
+        child: Visibility(
+          visible: isLoading,
+          child: isLoading == false
+              ? Container()
+              : DataTable2(
+                  columnSpacing: 5,
+                  horizontalMargin: 12,
+                  minWidth: 600,
+                  columns: const [
+                    DataColumn(label: Text("Id")),
+                    DataColumn(label: Text("Driver Name")),
+                    DataColumn(label: Text("Driver Contact")),
+                    DataColumn(
+                      label: Text("Front Image"),
+                    ),
+                    DataColumn(label: Text("Chase Number Image")),
+                    DataColumn(label: Text("RC Book Front")),
+                    DataColumn(label: Text("RC Book back")),
+                    DataColumn(
+                      label: Text('Insurance'),
+                    ),
+                    DataColumn(
+                      label: Text('FC Copy'),
+                    ),
+                    // DataColumn(
+                    //   label: Text('Action'),
+                    // ),
+                  ],
+                  rows: carDocumentsListModel.body
+                      .map((e) => DataRow(cells: [
+                            DataCell(CustomText(
+                              text: (e.driverDriverId),
                               size: 12,
-                            ))),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["chaseimg"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
+                              weight: FontWeight.normal,
+                              color: Colors.black,
+                            )),
+                            DataCell(CustomText(
+                              text: (e.driverName),
                               size: 12,
-                            ))),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["rcfront"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
+                              weight: FontWeight.normal,
+                              color: Colors.black,
+                            )),
+                            DataCell(CustomText(
+                              text: (e.driverContact),
                               size: 12,
-                            ))),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["rcback"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
-                              size: 12,
-                            ))),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["insurance"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
-                              size: 12,
-                            ))),
-                        DataCell(Container(
-                            decoration: BoxDecoration(
-                              color: light,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: active, width: .5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            child: CustomText(
-                              text: (e["fccopy"]),
-                              color: active.withOpacity(.7),
-                              weight: FontWeight.bold,
-                              size: 12,
-                            ))),
-                        DataCell(ElevatedButton(
-                            style: ElevatedButton.styleFrom(primary: blue),
-                            onPressed: () {},
-                            child: CustomText(
-                              text: e['action'],
-                              color: Colors.white,
-                            )))
-                      ]))
-                  .toList()),
-      // replacement: const Center(
-      //   child: CircularProgressIndicator(),
-      // ),
-    );
+                              weight: FontWeight.normal,
+                              color: Colors.black,
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.frontImage),
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.chaseImage),
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.rcFront),
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.rcBack),
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.insurance),
+                            )),
+                            DataCell(Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(e.fc ?? ''),
+                            )),
+                          ]))
+                      .toList()),
+          replacement: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        ));
   }
 }
